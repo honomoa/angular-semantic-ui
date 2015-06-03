@@ -145,6 +145,7 @@ angular.module('angularify.semantic.checkbox', [])
       type: "@",
       size: "@",
       checked: "@",
+      value: "@",
       disabled: "@",
       model: '=ngModel'
     },
@@ -166,6 +167,9 @@ angular.module('angularify.semantic.checkbox', [])
       } else if (scope.type == 'toggle') {
         scope.type = 'toggle';
         scope.checkbox_class = 'ui toggle checkbox';
+      } else if (scope.type == 'radio'){
+        scope.type = 'radio';
+        scope.checkbox_class = 'ui radio checkbox';
       } else {
         scope.type = 'standard';
         scope.checkbox_class = 'ui checkbox';
@@ -202,7 +206,12 @@ angular.module('angularify.semantic.checkbox', [])
       //
       element.bind('click', function() {
         scope.$apply(function() {
-          if (scope.disabled === undefined) {
+          if (scope.type == 'radio') {
+            scope.checked = true;
+            scope.model   = scope.value;
+            element.children()[0].setAttribute('checked', 'true');
+	  }
+	  else {
             if (scope.checked === true) {
               scope.checked = true;
               scope.model = false;
@@ -223,7 +232,13 @@ angular.module('angularify.semantic.checkbox', [])
         if (val === undefined)
           return;
 
-        if (val === true) {
+        var toBeChecked = false;
+        if (scope.type == 'radio') {
+          toBeChecked = (scope.model == scope.value);
+        } else {
+          toBeChecked = (scope.model || scope.model == 'true');
+        }
+	if (toBeChecked) {
           scope.checked = true;
           element.children()[0].setAttribute('checked', 'true');
         } else {
@@ -234,6 +249,7 @@ angular.module('angularify.semantic.checkbox', [])
     }
   };
 });
+
 'use strict';
 
 angular.module('angularify.semantic.dimmer', [])
