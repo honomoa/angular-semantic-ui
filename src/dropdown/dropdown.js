@@ -117,9 +117,10 @@ angular.module('angularify.semantic.dropdown', [])
     require: '^dropdown',
     scope: {
       title: '=title',
-      value: '=value'
+      value: '=value',
+      class: '@'
     },
-    template: '<div class="item" ng-transclude>{{ item_title }}</div>',
+    template: '<div class="{{ class }}" ng-transclude>{{ item_title }}</div>',
     link: function(scope, element, attrs, DropDownController) {
 
       // Check if title= was set... if not take the contents of the dropdown-group tag
@@ -142,7 +143,9 @@ angular.module('angularify.semantic.dropdown', [])
       // Menu item click handler
       //
       element.bind('click', function() {
-        DropDownController.update_model(scope.item_title, scope.item_value);
+        if (element[0].className.indexOf('header') < 0 ) {
+          DropDownController.update_model(scope.item_title, scope.item_value);
+        }
       });
 
       scope.$on('$destroy', function(){
